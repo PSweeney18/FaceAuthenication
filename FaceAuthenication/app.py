@@ -10,12 +10,12 @@ app = Flask(__name__)
 # Delete previous image used for the face verification
 @app.route('/delete')
 def delete(s3, client):
-    myBucket = s3.Bucket('faceverifyproject')
+    myBucket = s3.Bucket('BUCKET_NAME_HERE')
     for obj in myBucket.objects.all():
         if obj.key != 'IMG_Reference.jpeg':
             verificationImage = obj.key
     referenceImage = 'IMG_Reference.jpeg'
-    client.delete_object(Bucket='faceverifyproject',Key=verificationImage)
+    client.delete_object(Bucket='BUCKET_NAME_HERE',Key=verificationImage)
     return referenceImage
 
 # Call the AWS Face compare API
@@ -55,9 +55,6 @@ def home():
 @app.route('/main')
 def main():
         
-    # Call the OpenCV application to take a picture
-    verificationImage = camera()
-        
     # Delete the previously uploaded image
     s3 = boto3.resource('s3')
     client = boto3.client('s3')
@@ -65,11 +62,11 @@ def main():
     
     # Store the image that was retrieved from the camera
     with open("Verification.jpeg",'rb') as data:
-        client.upload_fileobj(data, 'faceverifyproject','Verification.jpeg')
+        client.upload_fileobj(data, 'BUCKET_NAME_HERE','Verification.jpeg')
     
     # Compare the two images that are pulled from the s3 bucket
     face_matches=compare_faces(reference, verificationImage)
-    return "Face matches: " + str(face_matches)
+    return str(face_matches)
 
 
 @app.post('/api')
@@ -91,7 +88,7 @@ def api():
     
     # Store the image that was retrieved from the camera
     with open("Verification.jpeg",'rb') as data:
-        client.upload_fileobj(data, 'faceverifyproject', 'Verification.jpeg')
+        client.upload_fileobj(data, 'BUCKET_NAME_HERE', 'Verification.jpeg')
     
     # Compare the two images that are pulled from the s3 bucket
     face_matches=compare_faces(reference, verificationImage)
