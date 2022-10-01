@@ -6,16 +6,6 @@ app = Flask(__name__)
 
 
 
-# Capture an image from the user using CV2 library
-@app.route('/camera')
-def camera():
-    cam = cv2.VideoCapture(0)
-    cameraAvailable, image = cam.read()
-    if cameraAvailable:
-        cv2.imshow('video', image)
-        cv2.imwrite('Verification.jpeg', image)
-        verification = 'Verification.jpeg'
-        return verification
 
 # Delete previous image used for the face verification
 @app.route('/delete')
