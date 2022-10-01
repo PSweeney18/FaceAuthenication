@@ -5,10 +5,7 @@ import flask
 app = Flask(__name__)
 
 
-
-
 # Delete previous image used for the face verification
-@app.route('/delete')
 def delete(s3, client):
     myBucket = s3.Bucket('BUCKET_NAME_HERE')
     for obj in myBucket.objects.all():
@@ -19,7 +16,6 @@ def delete(s3, client):
     return referenceImage
 
 # Call the AWS Face compare API
-@app.route('/compare')
 def compare_faces(referenceImage, verificationImage):
 
     client=boto3.client('rekognition')
@@ -52,7 +48,6 @@ def compare_faces(referenceImage, verificationImage):
 def home():
     return render_template('index.html')
 
-@app.route('/main')
 def main():
         
     # Delete the previously uploaded image
